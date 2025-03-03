@@ -315,11 +315,11 @@ class MainGUI(QWidget):
     def initUI(self):
         layout = QVBoxLayout()
 
-        self.setWindowTitle("Tool Manager")
+        self.setWindowTitle("eSim Tool Manager (Updater)")
         # self.setGeometry(-200, -200, 400, 300)
         self.center()
         
-        self.title_label = QLabel("Tool Manager (Update)", self)
+        self.title_label = QLabel("eSim Updater", self)
         self.title_label.setAlignment(Qt.AlignCenter)
         self.title_label.setStyleSheet("font-size: 20px; padding: 10px 0;")
         layout.addWidget(self.title_label)
