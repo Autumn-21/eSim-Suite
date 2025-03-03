@@ -2,10 +2,23 @@ import sys
 import subprocess
 import json
 import datetime
-from PyQt5.QtWidgets import QApplication, QWidget, QVBoxLayout, QPushButton, QLabel
+
+def install_pyqt5():
+    """Checks if PyQt5 is installed and installs it if missing."""
+    try:
+        import PyQt5
+        print("PyQt5 is already installed.")
+    except ImportError:
+        print("PyQt5 is not installed. Installing now...")
+        subprocess.run(["sudo", "apt-get", "install", "-y", "python3-pyqt5"], check=True)
+        print("PyQt5 installation complete.")
+
+install_pyqt5()
+
+from PyQt5.QtWidgets import QApplication, QWidget, QVBoxLayout, QPushButton, QLabel, QMessageBox
 from PyQt5.QtCore import Qt
 
-class ESimInstaller(QWidget):
+class ESimToolManager(QWidget):
     def __init__(self):
         super().__init__()
         self.initUI()
@@ -51,7 +64,7 @@ class ESimInstaller(QWidget):
 
         btn_uninstall = QPushButton("Uninstall eSim", self)
         btn_uninstall.setStyleSheet("font-size: 14px; padding: 5px 0;")
-        btn_uninstall.clicked.connect(lambda: self.run_command("./install-eSim.sh --uninstall"))
+        btn_uninstall.clicked.connect(lambda: self.run_uninstallation())
         layout.addWidget(btn_uninstall)
         
         self.setLayout(layout)
@@ -70,20 +83,27 @@ class ESimInstaller(QWidget):
         print(f"Executing: {command}")
         subprocess.run(command, shell=True)
         self.update_json(mode)
-        print("Done!")
-    
+        self.show_message(f"The eSim for {mode} mode has been successfully installed.")
+
+    def run_uninstallation(self):
+        command = "./install-eSim.sh --uninstall"
+        print(f"Executing: {command}")
+        subprocess.run(command, shell=True)
+        self.show_message("The eSim has been successfully uninstalled.")
+
     def get_version(self, package_name):
         version_commands = {
             "ngspice": ["ngspice", "-v"],
-            "kicad": ["kicad-cli", "--version"],
+            "kicad": ["apt-cache", "policy", "kicad"],  # Use apt-cache to get installed version
             "ghdl": ["ghdl", "--version"],
             "verilator": ["verilator", "--version"]
         }
-        
+
         if package_name in version_commands:
             try:
                 result = subprocess.run(version_commands[package_name], capture_output=True, text=True, check=True)
                 output_lines = result.stdout.strip().split("\n")
+
                 if package_name == "ngspice":
                     for line in output_lines:
                         if "ngspice-" in line:
@@ -92,10 +112,17 @@ class ESimInstaller(QWidget):
                     return output_lines[0].split()[1]  # Extract version from "GHDL X.XX"
                 elif package_name == "verilator":
                     return output_lines[0].split()[1]  # Extract version from "Verilator X.XXX"
-                else:
-                    return output_lines[0]  # Default case, return first line
+                elif package_name == "kicad":
+                    for line in output_lines:
+                        if "Installed:" in line:
+                            full_version = line.split("Installed:")[1].strip().split()[0]  # Extract full version
+                            return full_version.split("-")[0]  # Extract only "6.0.11"
+                    return "Not Installed"
+
+                return output_lines[0]  # Default case, return first line
             except (subprocess.CalledProcessError, FileNotFoundError, IndexError):
                 return "Unknown"
+        
         return "Unknown"
     
     def update_json(self, mode):
@@ -121,15 +148,23 @@ class ESimInstaller(QWidget):
         with open(json_file, "w") as file:
             json.dump(data, file, indent=4)
         print("Updated information.json")
-    
+
+    def show_message(self, message):
+        """Displays a pop-up message box with the given message."""
+        msg_box = QMessageBox()
+        msg_box.setIcon(QMessageBox.Information)
+        msg_box.setWindowTitle("Completed")
+        msg_box.setText(message)
+        msg_box.setStandardButtons(QMessageBox.Ok)
+        msg_box.exec_()
+
     def run_command(self, command):
         print(f"Executing: {command}")
         subprocess.run(command, shell=True)
         print("Done!")
 
-
 if __name__ == '__main__':
     app = QApplication(sys.argv)
-    ex = ESimInstaller()
+    ex = ESimToolManager()
     ex.show()
     sys.exit(app.exec_())
