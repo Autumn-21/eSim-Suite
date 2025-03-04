@@ -28,7 +28,7 @@ class ESimToolManager(QWidget):
 
         title = QLabel("Tool Manager for eSim", self)
         title.setAlignment(Qt.AlignCenter)
-        title.setStyleSheet("font-size: 16px; font-weight: bold; padding: 10px 0;")
+        title.setStyleSheet("font-size: 18px; font-weight: bold; padding: 10px 0;")
         layout.addWidget(title)
         
         desc_analog = QLabel("Install the eSim for the Analog Project (KiCad and Ngspice)", self)
@@ -58,25 +58,35 @@ class ESimToolManager(QWidget):
         btn_updater_gui.clicked.connect(lambda: self.run_command("python3 updater_gui.py"))
         layout.addWidget(btn_updater_gui)
         
-        desc_uninstall = QLabel("Uninstall the eSim including all the packages", self)
-        desc_uninstall.setStyleSheet("font-size: 14px; padding: 30px 0 10px 0;")
-        layout.addWidget(desc_uninstall)
-
-        btn_uninstall = QPushButton("Uninstall eSim", self)
-        btn_uninstall.setStyleSheet("font-size: 14px; padding: 5px 0;")
-        btn_uninstall.clicked.connect(lambda: self.run_uninstallation())
-        layout.addWidget(btn_uninstall)
+        desc_uninstall_digital = QLabel("Uninstall the digital packages (Verilator and GHDL)", self)
+        desc_uninstall_digital.setStyleSheet("font-size: 14px; padding: 30px 0 10px 0;")
+        layout.addWidget(desc_uninstall_digital)
+        
+        btn_uninstall_digital = QPushButton("Uninstall Digital Packages", self)
+        btn_uninstall_digital.setStyleSheet("font-size: 14px; padding: 5px 0;")
+        btn_uninstall_digital.clicked.connect(lambda: self.run_uninstallation("digital"))
+        layout.addWidget(btn_uninstall_digital)
+        
+        desc_uninstall_all = QLabel("Uninstall all the packages of eSim", self)
+        desc_uninstall_all.setStyleSheet("font-size: 14px; padding: 30px 0 10px 0;")
+        layout.addWidget(desc_uninstall_all)
+        
+        btn_uninstall_all = QPushButton("Uninstall All Packages", self)
+        btn_uninstall_all.setStyleSheet("font-size: 14px; padding: 5px 0;")
+        btn_uninstall_all.clicked.connect(lambda: self.run_uninstallation("all"))
+        layout.addWidget(btn_uninstall_all)
         
         self.setLayout(layout)
         self.setWindowTitle("eSim Tool Manager")
         self.resize(400, 300)
-        self.center()
+        self.adjust_position()
     
-    def center(self):
-        qr = self.frameGeometry()
-        cp = QApplication.desktop().screenGeometry().center()
-        qr.moveCenter(cp)
-        self.move(qr.topLeft())
+    def adjust_position(self):
+        screen = QApplication.desktop().screenGeometry()
+        widget = self.geometry()
+        x = (screen.width() - widget.width()) // 2
+        y = (screen.height() - widget.height()) // 3  # Move up slightly
+        self.move(x, y)
 
     def run_installation(self, mode):
         command = f"./install-eSim.sh --install --{mode}"
@@ -85,11 +95,17 @@ class ESimToolManager(QWidget):
         self.update_json(mode)
         self.show_message(f"The eSim for {mode} mode has been successfully installed.")
 
-    def run_uninstallation(self):
-        command = "./install-eSim.sh --uninstall"
+    def run_uninstallation(self, mode):
+        if mode == "digital":
+            command = "./install-eSim.sh --uninstall --digital"
+            message = "The digital packages (Verilator and GHDL) have been successfully uninstalled."
+        else:
+            command = "./install-eSim.sh --uninstall"
+            message = "All eSim packages have been successfully uninstalled."
+        
         print(f"Executing: {command}")
         subprocess.run(command, shell=True)
-        self.show_message("The eSim has been successfully uninstalled.")
+        self.show_message(message)
 
     def get_version(self, package_name):
         version_commands = {

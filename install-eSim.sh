@@ -285,7 +285,6 @@ function createDesktopStartScript
 
 ### Checking if file is passsed as argument to script
 
-
 if [ "$#" -eq 1 ]; then
     option=$1
 elif [ "$#" -eq 2 ]; then
@@ -295,6 +294,7 @@ else
     echo "USAGE:"
     echo "./install-eSim.sh --install --analog"
     echo "./install-eSim.sh --install --digital"
+    echo "./install-eSim.sh --uninstall --digital"
     echo "./install-eSim.sh --uninstall"
     exit 1
 fi
@@ -389,50 +389,62 @@ if [ "$option" == "--install" ]; then
     echo "or double click on \"eSim\" icon placed on Desktop"
 
 
-elif [ "$option" == "--uninstall" ];then
-    echo -n "Are you sure? It will remove eSim completely including KiCad, Makerchip, NGHDL and SKY130 PDK along with their models and libraries (y/n):"
+# Uninstall script for install-eSim.sh
+elif [ "$option" == "--uninstall" ]; then
+    if [ "$install_mode" == "--digital" ]; then
+        echo -n "Are you sure? It will remove eSim digital packages (Verilator and GHDL) along with their models and libraries (y/n): "
+    else
+        echo -n "Are you sure? It will remove eSim completely including KiCad, Makerchip, NGHDL, and SKY130 PDK along with their models and libraries (y/n): "
+    fi
+    
     read getConfirmation
-    if [ $getConfirmation == "y" -o $getConfirmation == "Y" ];then
-        echo "Removing eSim............................"
-        sudo rm -rf $HOME/.esim $HOME/Desktop/esim.desktop /usr/bin/esim /usr/share/applications/esim.desktop
-        echo "Removing KiCad..........................."
-        sudo apt purge -y kicad kicad-footprints kicad-libraries kicad-symbols kicad-templates
-        sudo rm -rf /usr/share/kicad
-        rm -rf $HOME/.config/kicad/6.0
-
-        echo "Removing Makerchip......................."
-        pip3 uninstall -y hdlparse
-        pip3 uninstall -y makerchip-app
-        pip3 uninstall -y sandpiper-saas
-
-        echo "Removing SKY130 PDK......................"
-        sudo rm -R /usr/share/local/sky130_fd_pr
-
-        echo "Removing NGHDL..........................."
-        rm -rf library/modelParamXML/Nghdl/*
-        rm -rf library/modelParamXML/Ngveri/*
-        cd nghdl/
-        if [ $? -eq 0 ];then
-        	chmod +x install-nghdl.sh
-    	    ./install-nghdl.sh --uninstall
-    	    cd ../
-    	    rm -rf nghdl
-            if [ $? -eq 0 ];then
-                echo -e "----------------eSim Uninstalled Successfully----------------"
-            else
-                echo -e "\nError while removing some files/directories in \"nghdl\". Please remove it manually"
-            fi
+    if [ "$getConfirmation" == "y" -o "$getConfirmation" == "Y" ]; then
+        if [ "$install_mode" == "--digital" ]; then
+            echo "Uninstalling only digital components..."
+            cd nghdl/
+            chmod +x install-nghdl.sh
+            ./install-nghdl.sh --uninstall --digital
         else
-            echo -e "\nCannot find \"nghdl\" directory. Please remove it manually"
+            echo "Uninstalling all components..."
+            sudo rm -rf $HOME/.esim $HOME/Desktop/esim.desktop /usr/bin/esim /usr/share/applications/esim.desktop
+            echo "Removing KiCad..........................."
+            sudo apt purge -y kicad kicad-footprints kicad-libraries kicad-symbols kicad-templates
+            sudo rm -rf /usr/share/kicad
+            rm -rf $HOME/.config/kicad/6.0
+
+            echo "Removing Makerchip......................."
+            pip3 uninstall -y hdlparse
+            pip3 uninstall -y makerchip-app
+            pip3 uninstall -y sandpiper-saas
+
+            echo "Removing SKY130 PDK......................"
+            sudo rm -R /usr/share/local/sky130_fd_pr
+
+            echo "Removing NGHDL..........................."
+            rm -rf library/modelParamXML/Nghdl/*
+            rm -rf library/modelParamXML/Ngveri/*
+            cd nghdl/
+            if [ $? -eq 0 ]; then
+                chmod +x install-nghdl.sh
+                ./install-nghdl.sh --uninstall
+                cd ../
+                rm -rf nghdl
+                if [ $? -eq 0 ]; then
+                    echo -e "----------------eSim Uninstalled Successfully----------------"
+                else
+                    echo -e "\nError while removing some files/directories in \"nghdl\". Please remove it manually"
+                fi
+            else
+                echo -e "\nCannot find \"nghdl\" directory. Please remove it manually"
+            fi
         fi
-    elif [ $getConfirmation == "n" -o $getConfirmation == "N" ];then
+    elif [ "$getConfirmation" == "n" -o "$getConfirmation" == "N" ]; then
         exit 0
     else 
         echo "Please select the right option."
         exit 0
     fi
-
-else 
+else
     echo "Please select the proper operation."
     echo "--install"
     echo "--uninstall"

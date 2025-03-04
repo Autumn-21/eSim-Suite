@@ -317,11 +317,11 @@ class MainGUI(QWidget):
 
         self.setWindowTitle("eSim Tool Manager (Updater)")
         # self.setGeometry(-200, -200, 400, 300)
-        self.center()
+        self.adjust_position()
         
         self.title_label = QLabel("eSim Updater", self)
         self.title_label.setAlignment(Qt.AlignCenter)
-        self.title_label.setStyleSheet("font-size: 20px; padding: 10px 0;")
+        self.title_label.setStyleSheet("font-size: 18px; font-weight: bold; padding: 10px 0;")
         layout.addWidget(self.title_label)
 
         self.version_label = QLabel("Installed Version", self)
@@ -334,66 +334,66 @@ class MainGUI(QWidget):
 
         self.download_label = QLabel("Please download the packages first.", self)
         self.download_label.setAlignment(Qt.AlignCenter)
-        self.download_label.setStyleSheet("font-size: 14px; padding: 5px 0;")
+        self.download_label.setStyleSheet("font-size: 14px; padding: 15px 0 5px 0;")
         layout.addWidget(self.download_label)
 
         self.download_button = QPushButton("Download Packages", self)
-        self.download_button.setStyleSheet("font-size: 14px;")
+        self.download_button.setStyleSheet("font-size: 14px; padding: 5px 0;")
         self.download_button.clicked.connect(self.runDownloadPackages)
         layout.addWidget(self.download_button)
 
         self.update_label = QLabel("Please update the dependencies first.", self)
         self.update_label.setAlignment(Qt.AlignCenter)
-        self.update_label.setStyleSheet("font-size: 14px; padding: 5px 0;")
+        self.update_label.setStyleSheet("font-size: 14px; padding: 15px 0 5px 0;")
         layout.addWidget(self.update_label)
 
         self.update_button = QPushButton("Update Dependencies", self)
-        self.update_button.setStyleSheet("font-size: 14px;")
+        self.update_button.setStyleSheet("font-size: 14px; padding: 5px 0;")
         self.update_button.clicked.connect(lambda: self.runUpdate(self.files["Update Dependencies"]))
         layout.addWidget(self.update_button)
 
         self.Updater_label = QLabel("You can update each package from the respective updater.", self)
         self.Updater_label.setAlignment(Qt.AlignCenter)
-        self.Updater_label.setStyleSheet("font-size: 14px; padding: 5px 0;")
+        self.Updater_label.setStyleSheet("font-size: 14px; padding: 15px 0 5px 0;")
         layout.addWidget(self.Updater_label)
 
         self.kicad_button = QPushButton("Open KiCad Updater", self)
-        self.kicad_button.setStyleSheet("font-size: 14px;")
+        self.kicad_button.setStyleSheet("font-size: 14px; padding: 5px 0;")
         self.kicad_button.clicked.connect(self.openKiCad)
         layout.addWidget(self.kicad_button)
 
         self.ghdl_button = QPushButton("Open GHDL Updater", self)
-        self.ghdl_button.setStyleSheet("font-size: 14px;")
+        self.ghdl_button.setStyleSheet("font-size: 14px; padding: 5px 0;")
         self.ghdl_button.clicked.connect(self.openGHDL)
         layout.addWidget(self.ghdl_button)
 
         self.verilator_button = QPushButton("Open Verilator Updater", self)
-        self.verilator_button.setStyleSheet("font-size: 14px;")
+        self.verilator_button.setStyleSheet("font-size: 14px; padding: 5px 0;")
         self.verilator_button.clicked.connect(self.openVerilator)
         layout.addWidget(self.verilator_button)
 
         self.ngspice_button = QPushButton("Open NGSPICE Updater", self)
-        self.ngspice_button.setStyleSheet("font-size: 14px;")
+        self.ngspice_button.setStyleSheet("font-size: 14px; padding: 5px 0;")
         self.ngspice_button.clicked.connect(self.openNGSpice)
         layout.addWidget(self.ngspice_button)
 
         self.check_label = QLabel("You can check the packages updated or not alongside with the version in the json file.", self)
         self.check_label.setAlignment(Qt.AlignCenter)
-        self.check_label.setStyleSheet("font-size: 14px; padding: 5px 0;")
+        self.check_label.setStyleSheet("font-size: 14px; padding: 15px 0 5px 0;")
         layout.addWidget(self.check_label)
 
         self.check_button = QPushButton("Check Packages", self)
-        self.check_button.setStyleSheet("font-size: 14px;")
+        self.check_button.setStyleSheet("font-size: 14px; padding: 5px 0;")
         self.check_button.clicked.connect(lambda: self.runUpdate(self.files["Check Packages"]))
         layout.addWidget(self.check_button)
 
         self.remove_label = QLabel("Please remove the packages for the storage usage.", self)
         self.remove_label.setAlignment(Qt.AlignCenter)
-        self.remove_label.setStyleSheet("font-size: 14px; padding: 5px 0;")
+        self.remove_label.setStyleSheet("font-size: 14px; padding: 15px 0 5px 0;")
         layout.addWidget(self.remove_label)
 
         self.remove_button = QPushButton("Remove Packages", self)
-        self.remove_button.setStyleSheet("font-size: 14px;")
+        self.remove_button.setStyleSheet("font-size: 14px; padding: 5px 0;")
         self.remove_button.clicked.connect(self.runRemovePackages)
         layout.addWidget(self.remove_button)
         
@@ -447,6 +447,13 @@ class MainGUI(QWidget):
         frame = self.frameGeometry()
         frame.moveCenter(screen)
         self.move(frame.topLeft())
+
+    def adjust_position(self):
+        screen = QApplication.desktop().screenGeometry()
+        widget = self.geometry()
+        x = (screen.width() - widget.width()) // 2
+        y = (screen.height() - widget.height()) // 3  # Move up slightly
+        self.move(x, y)    
 
 if __name__ == "__main__":
     app = QApplication(sys.argv)
