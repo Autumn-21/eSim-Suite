@@ -44,15 +44,15 @@ Table of contents
     Download Links
     Saved Filename	            Download Link
     ghdl-nightly.tar.gz	        https://github.com/ghdl/ghdl/archive/refs/tags/nightly.tar.gz
-    ghdl-4.1.0.tar.gz	          https://github.com/ghdl/ghdl/archive/refs/tags/v4.1.0.tar.gz
-    ghdl-4.0.0.tar.gz	          https://github.com/ghdl/ghdl/archive/refs/tags/v4.0.0.tar.gz
-    ghdl-3.0.0.tar.gz	          https://github.com/ghdl/ghdl/archive/refs/tags/v3.0.0.tar.gz
-    verilator-4.228.tar.gz	    https://github.com/verilator/verilator/archive/refs/tags/v4.228.tar.gz
-    verilator-5.020.tar.gz	    https://github.com/verilator/verilator/archive/refs/tags/v5.020.tar.gz
-    verilator-5.026.tar.gz	    https://github.com/verilator/verilator/archive/refs/tags/v5.026.tar.gz
-    verilator-5.030.tar.gz	    https://github.com/verilator/verilator/archive/refs/tags/v5.030.tar.gz
-    ngspice-38.tar.gz	          https://github.com/imr/ngspice/archive/refs/tags/ngspice-38.tar.gz
-    ngspice-40.tar.gz	          https://github.com/imr/ngspice/archive/refs/tags/ngspice-40.tar.gz
-    ngspice-43.tar.gz	          https://github.com/imr/ngspice/archive/refs/tags/ngspice-43.tar.gz
+    ghdl-4.1.0.tar.gz	        https://github.com/ghdl/ghdl/archive/refs/tags/v4.1.0.tar.gz
+    ghdl-4.0.0.tar.gz	        https://github.com/ghdl/ghdl/archive/refs/tags/v4.0.0.tar.gz
+    ghdl-3.0.0.tar.gz	        https://github.com/ghdl/ghdl/archive/refs/tags/v3.0.0.tar.gz
+    verilator-4.228.tar.gz	https://github.com/verilator/verilator/archive/refs/tags/v4.228.tar.gz
+    verilator-5.020.tar.gz	https://github.com/verilator/verilator/archive/refs/tags/v5.020.tar.gz
+    verilator-5.026.tar.gz	https://github.com/verilator/verilator/archive/refs/tags/v5.026.tar.gz
+    verilator-5.030.tar.gz	https://github.com/verilator/verilator/archive/refs/tags/v5.030.tar.gz
+    ngspice-38.tar.gz	        https://github.com/imr/ngspice/archive/refs/tags/ngspice-38.tar.gz
+    ngspice-40.tar.gz	        https://github.com/imr/ngspice/archive/refs/tags/ngspice-40.tar.gz
+    ngspice-43.tar.gz	        https://github.com/imr/ngspice/archive/refs/tags/ngspice-43.tar.gz
 
 Important: Make sure each file is saved exactly as listed (e.g., ghdl-4.1.0.tar.gz) before placing it in the nghdl/packages/ directory.
