@@ -1,6 +1,4 @@
-=======
 # eSim-Tool-Manager-Update
-=======
 ![GitHub release (latest by date)](https://img.shields.io/github/v/release/fossee/esim?color=blueviolet)
 ![GitHub](https://img.shields.io/github/license/fossee/esim?color=blue)
 ![Python](https://img.shields.io/badge/python-v3.6+-blue.svg)
