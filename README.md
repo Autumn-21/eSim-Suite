@@ -1,7 +1,4 @@
-<<<<<<< HEAD
-# eSim-Tool-Manager-Update
 =======
-<<<<<<< HEAD
 # eSim-Tool-Manager-Update
 =======
 ![GitHub release (latest by date)](https://img.shields.io/github/v/release/fossee/esim?color=blueviolet)
@@ -55,5 +52,3 @@ Please refer [here](https://github.com/FOSSEE/eSim/blob/master/CONTRIBUTION.md) 
 
 ## License
 It is developed by FOSSEE Team at IIT Bombay and is released under GNU GPL License.
->>>>>>> First Commit
->>>>>>> initial commit
